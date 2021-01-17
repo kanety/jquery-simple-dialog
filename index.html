@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="dist/jquery-simple-dialog.js"></script>
+  <style>
+  .dialog {
+    display: none;
+    width: 400px;
+    padding: 10px;
+  }
+  </style>
+</head>
+<body>
+  <h1>Basic use</h1>
+  <div id="basic" class="dialog">
+    <div id="basic_title">TITLE</div>
+    <div><a href="#content1">content1</a></div>
+    <div><a href="#content2">content2</a></div>
+    <hr>
+    <button type="button" id="basic_ok">OK</button>
+    <button type="button" id="basic_cancel">Cancel</button>
+  </div>
+  <button type="button" id="basic_opener">Open</button>
+  <script>
+  $('#basic').simpleDialog({
+    opener: '#basic_opener',
+    closer: '#basic_ok,#basic_cancel',
+    focus: '#basic_ok'
+  });
+  </script>
+
+  <h1>Draggable Dialog</h1>
+  <div id="drag" class="dialog">
+    <div id="drag_title">TITLE</div>
+    <div><a href="#content1">content1</a></div>
+    <div><a href="#content2">content2</a></div>
+    <hr>
+    <button type="button" id="drag_ok">OK</button>
+    <button type="button" id="drag_cancel">Cancel</button>
+  </div>
+  <button type="button" id="drag_opener">Open</button>
+  <script>
+  $('#drag').simpleDialog({
+    opener: '#drag_opener',
+    closer: '#drag_ok,#drag_cancel',
+    dragger: '#drag_title'
+  });
+  </script>
+
+  <h1>Modal Dialog</h1>
+  <div id="modal" class="dialog">
+    <div id="modal_title">TITLE</div>
+    <div><a href="#content1">content1</a></div>
+    <div><a href="#content2">content2</a></div>
+    <hr>
+    <button type="button" id="modal_ok">OK</button>
+    <button type="button" id="modal_cancel">Cancel</button>
+  </div>
+  <button type="button" id="modal_opener">Open</button>
+  <script>
+  $('#modal').simpleDialog({
+    opener: '#modal_opener',
+    closer: '#modal_ok,#modal_cancel',
+    dragger: '#modal_title',
+    modal: true
+  });
+  </script>
+
+  <h1>Callback</h1>
+  <div id="callback" class="dialog">
+    <div><a href="#content1">content1</a></div>
+    <div><a href="#content2">content2</a></div>
+    <hr>
+    <button type="button" id="callback_ok">OK</button>
+    <button type="button" id="callback_cancel">Cancel</button>
+  </div>
+  <button type="button" id="callback_opener">Open</button>
+  <script>
+  $('#callback').simpleDialog({
+    opener: '#callback_opener',
+    closer: '#callback_ok,#callback_cancel'
+  }).on('dialog:open', function(e, $elem) {
+    console.log('opened by ' + $elem.attr('id'));
+  }).on('dialog:close', function(e, $elem) {
+    console.log('closed by ' + $elem.attr('id'));
+  });
+  </script>
+</body>
+</html>
