@@ -91,12 +91,17 @@ module.exports = function(config) {
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: (function() {
       if (process.platform === "win32") {
-        //return ['Chrome', 'Firefox', 'IE', 'Edge']
-        return ['Chrome', 'Firefox', 'IE']
+        return ['Chrome', 'Firefox', 'IE', 'Edge']
       } else {
         return ['ChromeHeadless', 'FirefoxHeadless']
       }
     })(),
+
+
+    plugins: [
+      'karma-*',
+      require('@chiragrupani/karma-chromium-edge-launcher')
+    ],
 
 
     // Continuous Integration mode
