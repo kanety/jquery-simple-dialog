@@ -10,15 +10,8 @@ export default class Dialog {
     this.uid = new Date().getTime() + Math.random();
     this.namespace = `${NAMESPACE}-${this.uid}`;
 
-    this.$parent = this.$dialog.parent();
     this.$opener = $(this.options.opener);
     this.$closer = $(this.options.closer);
-
-    if (this.options.modal) {
-      this.$modal = $('<div>').addClass(`${NAMESPACE}-modal`).hide();
-      this.$modal.append(this.$dialog);
-      this.$parent.append(this.$modal);
-    }
   }
 
   init() {
@@ -30,10 +23,6 @@ export default class Dialog {
   destroy() {
     this.$dialog.removeClass(`${NAMESPACE}`);
     this.$dialog.removeData(NAMESPACE);
-    if (this.options.modal) {
-      this.$parent.append(this.$dialog);
-      this.$modal.remove();
-    }
     this.unbind();
   }
 
@@ -53,14 +42,6 @@ export default class Dialog {
         this.close($(e.currentTarget));
       }
     });
-
-    if (this.options.modal) {
-      this.$modal.on(`click.${this.namespace}`, (e) => {
-        if (e.target != this.$dialog.get(0) && !$.contains(this.$modal.get(0), e.target)) {
-          this.close($(e.currentTarget));
-        }
-      });
-    }
   }
 
   unbind() {
@@ -76,8 +57,7 @@ export default class Dialog {
     this.$dialog.show();
 
     if (this.options.modal) {
-      this.$modal.show();
-      $(document).find('body').addClass(`${NAMESPACE}-disable-scroll`);
+      this.createModal();
     }
     if (this.options.focus) {
       this.$dialog.find(this.options.focus).focus();
@@ -92,10 +72,28 @@ export default class Dialog {
     this.$dialog.hide();
 
     if (this.options.modal) {
-      this.$modal.hide();
-      $(document).find('body').removeClass(`${NAMESPACE}-disable-scroll`);
+      this.removeModal();
     }
 
     this.$dialog.trigger('dialog:close', [$target]);
+  }
+
+  createModal() {
+    this.$modal = $('<div>').addClass(`${NAMESPACE}-modal`);
+    this.$dialog.parent().append(this.$modal);
+    this.$modal.append(this.$dialog);
+    $(document).find('body').addClass(`${NAMESPACE}-disable-scroll`);
+
+    this.$modal.on(`click.${this.namespace}`, (e) => {
+      if (e.target != this.$dialog.get(0) && !$.contains(this.$modal.get(0), e.target)) {
+        this.close($(e.currentTarget));
+      }
+    });
+  }
+
+  removeModal() {
+    this.$modal.parent().append(this.$dialog);
+    this.$modal.remove();
+    $(document).find('body').removeClass(`${NAMESPACE}-disable-scroll`);
   }
 }
